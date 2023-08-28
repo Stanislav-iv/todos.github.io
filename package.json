@@ -56,9 +56,10 @@
     "prettier": "3.0.2"
   },
   "lint-staged": {
-    "*.(js,jsx)": [
+    "src/**/*.{js,jsx}": [
       "npm run lint:write",
-      "npm run prettier"
+      "npm run prettier",
+      "git add ."
     ]
   }
 }
