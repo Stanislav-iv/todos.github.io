@@ -69,6 +69,7 @@ export default class App extends Component {
   }
 
   filterItem(items, filter) {
+    console.log('text')
     switch (filter) {
       case 'all':
         return items
