@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
 import Footer from '../Footer/Footer'
@@ -6,17 +7,17 @@ import TaskList from '../TaskList/TaskList'
 import './app.css'
 
 export default class App extends Component {
-  maxId = 1
   state = {
     todoData: [],
     filter: 'all',
   }
+
   creatTodoItem(value) {
     return {
       label: value,
       completed: false,
       editing: false,
-      id: this.maxId++,
+      id: uuidv4(),
       date: new Date(),
     }
   }
@@ -40,20 +41,17 @@ export default class App extends Component {
   }
 
   toggleProperty(arr, id, propName) {
-    const idx = arr.findIndex((el) => el.id === id)
-    const oldItem = arr[idx]
-    const newItem = { ...oldItem, [propName]: !oldItem[propName] }
-    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
+    const idx = arr.map((el) => {
+      if (el.id === id) el = { ...el, [propName]: !el[propName] }
+      return el
+    })
+    return idx
   }
 
-  deleteItem = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id)
-      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)]
-      return {
-        todoData: newArray,
-      }
-    })
+  deleteItem = (idx) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.filter(({ id }) => id !== idx),
+    }))
   }
 
   onTextComplet = (id) => {
