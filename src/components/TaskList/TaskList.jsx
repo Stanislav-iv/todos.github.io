@@ -15,7 +15,7 @@ export default class TaskList extends Component {
     onEditeItem: PropTypes.func.isRequired,
   }
   render() {
-    const { todos, onDeleted, onTextComplet, onEditeItem } = this.props
+    const { todos, onDeleted, onTextComplet, onEditeItem, timerTask, stopTimer } = this.props
 
     const elements = todos.map((item) => {
       const { id, ...itemProps } = item
@@ -23,6 +23,8 @@ export default class TaskList extends Component {
         <Task
           {...itemProps}
           key={id}
+          stopTimer={() => stopTimer(id)}
+          timerTask={() => timerTask(id)}
           todo={item}
           onEditeItem={onEditeItem}
           onDeleted={() => onDeleted(id)}

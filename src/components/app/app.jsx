@@ -12,24 +12,83 @@ export default class App extends Component {
     filter: 'all',
   }
 
-  creatTodoItem(value) {
+  creatTodoItem(value, min, sec) {
     return {
       label: value,
       completed: false,
       editing: false,
       id: uuidv4(),
       date: new Date(),
+      min: min,
+      sec: sec,
+      time: `${min < 1 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`,
+      timerStop: false,
+      countDown: null,
     }
   }
 
-  addItem = (text) => {
-    const newItem = this.creatTodoItem(text)
+  addItem = (text, min, sec) => {
+    const newItem = this.creatTodoItem(text, min, sec)
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newItem]
       return { todoData: newArr }
     })
   }
+  timerTask = (idx) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((el) => {
+        if (el.id === idx) {
+          el.timerStop = true
+        }
 
+        clearInterval(el.countDown)
+
+        const sumSeconds = Number(el.min) * 60 + Number(el.sec)
+
+        const currentTime = Date.now()
+        const endTime = currentTime + sumSeconds * 1000
+
+        el.countDown = setInterval(() => {
+          if (el.timerStop) {
+            const secondLeft = Math.round((endTime - Date.now()) / 1000)
+            if (secondLeft < 0) {
+              clearInterval(el.countDown)
+              return
+            }
+            this.displayTimer(secondLeft, idx)
+          }
+        }, 1000)
+
+        return el
+      }),
+    }))
+  }
+
+  displayTimer = (seconds, id) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((el) => {
+        if (el.id === id) {
+          el.min = Math.floor(seconds / 60)
+          el.sec = seconds % 60
+          el.time = `${el.min}:${el.sec < 10 ? '0' : ''}${el.sec}`
+        }
+
+        return el
+      }),
+    }))
+  }
+  stopTimer = (id) => {
+    this.setState(({ todoData }) => ({
+      todoData: todoData.map((el) => {
+        if (el.id === id) {
+          clearInterval(el.countDown)
+          el.timerStop = false
+        }
+
+        return el
+      }),
+    }))
+  }
   onEditeItem = (idx, text) => {
     this.setState(({ todoData }) => ({
       todoData: todoData.map((el) => {
@@ -97,6 +156,8 @@ export default class App extends Component {
         <NewTaskForm addItem={this.addItem} />
         <section className="main">
           <TaskList
+            stopTimer={this.stopTimer}
+            timerTask={this.timerTask}
             onEditeItem={this.onEditeItem}
             todos={visItem}
             onDeleted={this.deleteItem}

@@ -38,15 +38,20 @@ export default class Task extends Component {
   }
 
   render() {
-    const { label, onDeleted, onTextComplet, completed, date } = this.props
+    const { label, onDeleted, onTextComplet, completed, date, timerTask, time, stopTimer } = this.props
 
     return (
       <li className={completed ? 'completed' : this.state.editing ? 'editing' : null}>
         <div className="view">
           <input className="toggle" type="checkbox" onClick={onTextComplet} />
           <label>
-            <span className="description">{label}</span>
-            <span className="created">
+            <span className="title">{label}</span>
+            <span className="description">
+              <button className="icon icon-play" onClick={timerTask}></button>
+              <button className="icon icon-pause" onClick={stopTimer}></button>
+              {time}
+            </span>
+            <span className="created description">
               {`created ${formatDistanceToNow(date, {
                 includeSeconds: true,
                 locale: times,
