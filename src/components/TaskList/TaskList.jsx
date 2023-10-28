@@ -1,37 +1,34 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import Task from '../Task/Task'
 import './TaskList.css'
 
-export default class TaskList extends Component {
-  static defaultProps = {
-    todos: [],
-  }
-  static propTypes = {
-    todos: PropTypes.arrayOf(PropTypes.object),
-    onDeleted: PropTypes.func.isRequired,
-    onTextComplet: PropTypes.func.isRequired,
-    onEditeItem: PropTypes.func.isRequired,
-  }
-  render() {
-    const { todos, onDeleted, onTextComplet, onEditeItem, timerTask, stopTimer } = this.props
-
-    const elements = todos.map((item) => {
-      const { id, ...itemProps } = item
-      return (
-        <Task
-          {...itemProps}
-          key={id}
-          stopTimer={() => stopTimer(id)}
-          timerTask={() => timerTask(id)}
-          todo={item}
-          onEditeItem={onEditeItem}
-          onDeleted={() => onDeleted(id)}
-          onTextComplet={() => onTextComplet(id)}
-        />
-      )
-    })
-    return <ul className="todo-list">{elements}</ul>
-  }
+const TaskList = ({ todos, onDeleted, onTextComplet, onEditeItem, timerTask, stopTimer }) => {
+  const elements = todos.map((item) => {
+    const { id, ...itemProps } = item
+    return (
+      <Task
+        {...itemProps}
+        key={id}
+        stopTimer={() => stopTimer(id)}
+        timerTask={() => timerTask(id)}
+        todo={item}
+        onEditeItem={onEditeItem}
+        onDeleted={() => onDeleted(id)}
+        onTextComplet={() => onTextComplet(id)}
+      />
+    )
+  })
+  return <ul className="todo-list">{elements}</ul>
 }
+TaskList.DefaultProps = {
+  todos: [],
+}
+TaskList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
+  onDeleted: PropTypes.func.isRequired,
+  onTextComplet: PropTypes.func.isRequired,
+  onEditeItem: PropTypes.func.isRequired,
+}
+export default TaskList

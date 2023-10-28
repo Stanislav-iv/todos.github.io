@@ -1,64 +1,40 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
 import './NewTaskForm.css'
 
-export default class NewTaskForm extends Component {
-  state = {
-    label: '',
-    min: '',
-    sec: '',
+const NewTaskForm = ({ addItem }) => {
+  const [label, setLabel] = useState('')
+  const [min, setMin] = useState('')
+  const [sec, setSec] = useState('')
+
+  const onLabelChange = (e) => {
+    setLabel(e.target.value)
   }
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
+  const onMinChange = (e) => {
+    setMin(e.target.value)
   }
-  onMinChange = (e) => {
-    this.setState({
-      min: e.target.value,
-    })
+  const onSecChange = (e) => {
+    setSec(e.target.value)
   }
-  onSecChange = (e) => {
-    this.setState({
-      sec: e.target.value,
-    })
-  }
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
-    if (this.state.label.trim()) this.props.addItem(this.state.label, this.state.min, this.state.sec)
-    this.setState({
-      label: '',
-      min: '',
-      sec: '',
-    })
+    if (label.trim()) addItem(label, min, sec)
+    setLabel('')
+    setMin('')
+    setSec('')
   }
 
-  render() {
-    return (
-      <header className="header">
-        <h1>todos</h1>
-        <form className="new-todo-form" onSubmit={this.onSubmit}>
-          <button type="submit" />
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            onChange={this.onLabelChange}
-            value={this.state.label}
-          />
-          <input
-            className="new-todo-form__timer"
-            placeholder="Min"
-            onChange={this.onMinChange}
-            value={this.state.min}
-          />
-          <input
-            className="new-todo-form__timer"
-            placeholder="Sec"
-            onChange={this.onSecChange}
-            value={this.state.sec}
-          />
-        </form>
-      </header>
-    )
-  }
+  return (
+    <header className="header">
+      <h1>todos</h1>
+      <form className="new-todo-form" onSubmit={onSubmit}>
+        <button type="submit" />
+        <input className="new-todo" placeholder="What needs to be done?" onChange={onLabelChange} value={label} />
+        <input className="new-todo-form__timer" placeholder="Min" onChange={onMinChange} value={min} />
+        <input className="new-todo-form__timer" placeholder="Sec" onChange={onSecChange} value={sec} />
+      </form>
+    </header>
+  )
 }
+
+export default NewTaskForm

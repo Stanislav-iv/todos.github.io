@@ -1,82 +1,71 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 import times from 'date-fns/locale/en-AU'
 import './Task.css'
 
-export default class Task extends Component {
-  static defaultProps = {
-    date: new Date(),
-  }
-  static propTypes = {
-    label: PropTypes.string.isRequired,
-    onDeleted: PropTypes.func.isRequired,
-    onTextComplet: PropTypes.func.isRequired,
-    completed: PropTypes.bool.isRequired,
-    date: PropTypes.instanceOf(Date),
-  }
-  state = {
-    editing: false,
-    label: '',
-  }
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
+const Task = ({ label, onDeleted, onTextComplet, completed, date, timerTask, time, stopTimer, todo, onEditeItem }) => {
+  const [editing, setEditing] = useState(false)
+  const [labelTask, setLabelTask] = useState('')
+
+  const onLabelChange = (e) => {
+    setLabelTask(e.target.value)
   }
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
-    const {
-      onEditeItem,
-      todo: { id },
-    } = this.props
-    onEditeItem(id, this.state.label)
 
-    this.setState({ label: '' })
-    this.setState({ editing: false })
+    onEditeItem(todo.id, labelTask)
+
+    setLabelTask('')
+    setEditing(false)
   }
 
-  render() {
-    const { label, onDeleted, onTextComplet, completed, date, timerTask, time, stopTimer } = this.props
+  return (
+    <li className={completed ? 'completed' : editing ? 'editing' : null}>
+      <div className="view">
+        <input className="toggle" type="checkbox" onClick={onTextComplet} />
+        <label>
+          <span className="title">{label}</span>
+          <span className="description">
+            <button className="icon icon-play" onClick={timerTask}></button>
+            <button className="icon icon-pause" onClick={stopTimer}></button>
+            {time}
+          </span>
+          <span className="created description">
+            {`created ${formatDistanceToNow(date, {
+              includeSeconds: true,
+              locale: times,
+              addSuffix: true,
+            })}`}
+          </span>
+        </label>
+        <button
+          className="icon icon-edit"
+          onClick={() => {
+            setEditing(!editing)
+            setLabelTask(todo.label)
+          }}
+        />
+        <button className="icon icon-destroy" onClick={onDeleted} />
+      </div>
 
-    return (
-      <li className={completed ? 'completed' : this.state.editing ? 'editing' : null}>
-        <div className="view">
-          <input className="toggle" type="checkbox" onClick={onTextComplet} />
-          <label>
-            <span className="title">{label}</span>
-            <span className="description">
-              <button className="icon icon-play" onClick={timerTask}></button>
-              <button className="icon icon-pause" onClick={stopTimer}></button>
-              {time}
-            </span>
-            <span className="created description">
-              {`created ${formatDistanceToNow(date, {
-                includeSeconds: true,
-                locale: times,
-                addSuffix: true,
-              })}`}
-            </span>
-          </label>
-          <button
-            className="icon icon-edit"
-            onClick={() =>
-              this.setState(({ editing }) => ({
-                editing: !editing,
-                label: this.props.todo.label,
-              }))
-            }
-          />
-          <button className="icon icon-destroy" onClick={onDeleted} />
-        </div>
-
-        {this.state.editing && (
-          <form onSubmit={this.onSubmit}>
-            <input type="text" className="edit" value={this.state.label} onChange={this.onLabelChange} />
-          </form>
-        )}
-      </li>
-    )
-  }
+      {editing && (
+        <form onSubmit={onSubmit}>
+          <input type="text" className="edit" value={labelTask} onChange={onLabelChange} />
+        </form>
+      )}
+    </li>
+  )
 }
+Task.DefaultProps = {
+  date: new Date(),
+}
+Task.propTypes = {
+  onDeleted: PropTypes.func.isRequired,
+  onTextComplet: PropTypes.func.isRequired,
+  completed: PropTypes.bool.isRequired,
+  date: PropTypes.instanceOf(Date),
+}
+
+export default Task

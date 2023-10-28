@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
@@ -6,13 +6,11 @@ import Footer from '../Footer/Footer'
 import TaskList from '../TaskList/TaskList'
 import './app.css'
 
-export default class App extends Component {
-  state = {
-    todoData: [],
-    filter: 'all',
-  }
+const App = () => {
+  const [todoData, setTodoData] = useState([])
+  const [filter, setFilter] = useState('all')
 
-  creatTodoItem(value, min, sec) {
+  const creatTodoItem = (value, min, sec) => {
     return {
       label: value,
       completed: false,
@@ -27,16 +25,14 @@ export default class App extends Component {
     }
   }
 
-  addItem = (text, min, sec) => {
-    const newItem = this.creatTodoItem(text, min, sec)
-    this.setState(({ todoData }) => {
-      const newArr = [...todoData, newItem]
-      return { todoData: newArr }
-    })
+  const addItem = (text, min, sec) => {
+    const newItem = creatTodoItem(text, min, sec)
+    setTodoData([...todoData, newItem])
   }
-  timerTask = (idx) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((el) => {
+
+  const timerTask = (idx) => {
+    setTodoData([
+      ...todoData.map((el) => {
         if (el.id === idx) {
           el.timerStop = true
         }
@@ -55,18 +51,18 @@ export default class App extends Component {
               clearInterval(el.countDown)
               return
             }
-            this.displayTimer(secondLeft, idx)
+            displayTimer(secondLeft, idx)
           }
         }, 1000)
 
         return el
       }),
-    }))
+    ])
   }
 
-  displayTimer = (seconds, id) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((el) => {
+  const displayTimer = (seconds, id) => {
+    setTodoData([
+      ...todoData.map((el) => {
         if (el.id === id) {
           el.min = Math.floor(seconds / 60)
           el.sec = seconds % 60
@@ -75,11 +71,12 @@ export default class App extends Component {
 
         return el
       }),
-    }))
+    ])
   }
-  stopTimer = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((el) => {
+
+  const stopTimer = (id) => {
+    setTodoData([
+      ...todoData.map((el) => {
         if (el.id === id) {
           clearInterval(el.countDown)
           el.timerStop = false
@@ -87,45 +84,32 @@ export default class App extends Component {
 
         return el
       }),
-    }))
+    ])
   }
-  onEditeItem = (idx, text) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((el) => {
+
+  const onEditeItem = (idx, text) => {
+    setTodoData([
+      ...todoData.map((el) => {
         if (el.id === idx) el.label = text
 
         return el
       }),
-    }))
+    ])
   }
 
-  toggleProperty(arr, id, propName) {
-    const idx = arr.map((el) => {
-      if (el.id === id) el = { ...el, [propName]: !el[propName] }
-      return el
-    })
-    return idx
+  const deleteItem = (idx) => {
+    setTodoData([...todoData.filter(({ id }) => id !== idx)])
   }
 
-  deleteItem = (idx) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter(({ id }) => id !== idx),
-    }))
+  const onTextComplet = (id) => {
+    setTodoData([...todoData.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : { ...todo }))])
   }
 
-  onTextComplet = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: this.toggleProperty(todoData, id, 'completed'),
-    }))
+  const clearCompleted = () => {
+    setTodoData([...todoData.filter((element) => !element.completed)])
   }
 
-  clearCompleted = () => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter((element) => !element.completed),
-    }))
-  }
-
-  filterItem(items, filter) {
+  const filterItem = (items, filter) => {
     switch (filter) {
       case 'all':
         return items
@@ -141,36 +125,30 @@ export default class App extends Component {
     }
   }
 
-  filterChang = (filter) => {
-    this.setState({ filter })
+  const filterChang = (filter) => {
+    setFilter(filter)
   }
 
-  render() {
-    const { todoData, filter } = this.state
-    const visItem = this.filterItem(todoData, filter)
-    const count = todoData.filter((el) => el.completed).length
-    const todoCount = todoData.length - count
+  const visItem = filterItem(todoData, filter)
+  const count = todoData.filter((el) => el.completed).length
+  const todoCount = todoData.length - count
 
-    return (
-      <section className="todoapp">
-        <NewTaskForm addItem={this.addItem} />
-        <section className="main">
-          <TaskList
-            stopTimer={this.stopTimer}
-            timerTask={this.timerTask}
-            onEditeItem={this.onEditeItem}
-            todos={visItem}
-            onDeleted={this.deleteItem}
-            onTextComplet={this.onTextComplet}
-          />
-          <Footer
-            todoCount={todoCount}
-            filter={filter}
-            filterChang={this.filterChang}
-            clearCompleted={this.clearCompleted}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <NewTaskForm addItem={addItem} />
+      <section className="main">
+        <TaskList
+          stopTimer={stopTimer}
+          timerTask={timerTask}
+          onEditeItem={onEditeItem}
+          todos={visItem}
+          onDeleted={deleteItem}
+          onTextComplet={onTextComplet}
+        />
+        <Footer todoCount={todoCount} filter={filter} filterChang={filterChang} clearCompleted={clearCompleted} />
       </section>
-    )
-  }
+    </section>
+  )
 }
+
+export default App
