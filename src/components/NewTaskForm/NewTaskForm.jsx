@@ -1,36 +1,54 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
-import './NewTaskForm.css'
+import './NewTaskForm.scss'
 
-export default class NewTaskForm extends Component {
-  state = {
-    label: '',
-  }
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
+const NewTaskForm = ({ addItem }) => {
+  const [label, setLabel] = useState('')
+  const [time, setTime] = useState({ min: '', sec: '' })
+
+  const onLabelChange = (e) => {
+    setLabel(e.target.value)
   }
 
-  onSubmit = (e) => {
+  const onTimeChange = (e) => {
+    setTime({ ...time, [e.target.name]: e.target.value })
+    if (e.target.value > 59) {
+      setTime({ min: '', sec: '' })
+    }
+  }
+
+  const onSubmit = (e) => {
     e.preventDefault()
-    if (this.state.label.trim()) this.props.addItem(this.state.label)
-    this.setState({
-      label: '',
-    })
+    if (label.trim()) addItem(label, time.min, time.sec)
+    setLabel('')
+    setTime({ sec: '', min: '' })
   }
 
-  render() {
-    return (
-      <form className="header" onSubmit={this.onSubmit}>
-        <h1>todos</h1>
+  return (
+    <header className="header">
+      <h1>todos</h1>
+      <form className="new-todo-form" onSubmit={onSubmit}>
+        <button type="submit" />
+        <input className="new-todo" placeholder="What needs to be done?" onChange={onLabelChange} value={label} />
         <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={this.onLabelChange}
-          value={this.state.label}
+          className="new-todo-form__timer"
+          type="number"
+          placeholder="Min"
+          name="min"
+          onChange={onTimeChange}
+          value={time.min}
+        />
+        <input
+          className="new-todo-form__timer"
+          type="number"
+          placeholder="Sec"
+          name="sec"
+          onChange={onTimeChange}
+          value={time.sec}
         />
       </form>
-    )
-  }
+    </header>
+  )
 }
+
+export default NewTaskForm
