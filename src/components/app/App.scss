@@ -4,26 +4,6 @@ body {
   padding: 0;
 }
 
-button {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  font-size: 100%;
-  vertical-align: baseline;
-  font-family: inherit;
-  font-weight: inherit;
-  color: inherit;
-  -webkit-appearance: none;
-  appearance: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-button::-moz-focus-inner {
-  border: none;
-}
-
 body {
   font:
     14px 'Helvetica Neue',
@@ -49,6 +29,9 @@ body {
   display: none;
 }
 
+
+
+
 .todoapp {
   background: #fff;
   margin: 130px 0 40px 0;
@@ -56,7 +39,46 @@ body {
   box-shadow:
     0 2px 4px 0 rgba(0, 0, 0, 0.2),
     0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
+
+    button {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      font-size: 100%;
+      vertical-align: baseline;
+      font-family: inherit;
+      font-weight: inherit;
+      color: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    button::-moz-focus-inner {
+      border: none;
+    }
+    h1 {
+      position: absolute;
+      top: -140px;
+      width: 100%;
+      font-size: 80px;
+      font-weight: 200;
+      text-align: center;
+      color: rgba(175, 47, 47, 0.15);
+      -webkit-text-rendering: optimizeLegibility;
+      -moz-text-rendering: optimizeLegibility;
+      text-rendering: optimizeLegibility;
+    }
+
 }
+
+
+
+
+
 
 .todoapp input::-webkit-input-placeholder {
   font-style: italic;
@@ -76,15 +98,4 @@ body {
   color: rgba(0, 0, 0, 0.4);
 }
 
-.todoapp h1 {
-  position: absolute;
-  top: -140px;
-  width: 100%;
-  font-size: 80px;
-  font-weight: 200;
-  text-align: center;
-  color: rgba(175, 47, 47, 0.15);
-  -webkit-text-rendering: optimizeLegibility;
-  -moz-text-rendering: optimizeLegibility;
-  text-rendering: optimizeLegibility;
-}
+

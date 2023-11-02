@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import NewTaskForm from '../NewTaskForm/NewTaskForm'
-import Footer from '../Footer/Footer'
-import TaskList from '../TaskList/TaskList'
-import './app.css'
+import NewTaskForm from '../newTaskForm/NewTaskForm'
+import Footer from '../footer/Footer'
+import TaskList from '../taskList/TaskList'
+import './App.scss'
 
 const App = () => {
   const [todoData, setTodoData] = useState([])
@@ -45,7 +45,7 @@ const App = () => {
         const endTime = currentTime + sumSeconds * 1000
 
         el.countDown = setInterval(() => {
-          if (el.timerStop) {
+          if (el.timerStop && !el.completed) {
             const secondLeft = Math.round((endTime - Date.now()) / 1000)
             if (secondLeft < 0) {
               clearInterval(el.countDown)
@@ -102,7 +102,14 @@ const App = () => {
   }
 
   const onTextComplet = (id) => {
-    setTodoData([...todoData.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : { ...todo }))])
+    stopTimer(id)
+    setTodoData([
+      ...todoData.map((el) => {
+        if (el.id === id && !el.completed) el.completed = true
+        else if (el.id === id && el.completed) el.completed = false
+        return el
+      }),
+    ])
   }
 
   const clearCompleted = () => {
@@ -150,5 +157,4 @@ const App = () => {
     </section>
   )
 }
-
 export default App

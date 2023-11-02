@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 import times from 'date-fns/locale/en-AU'
-import './Task.css'
+import './Task.scss'
 
 const Task = ({ label, onDeleted, onTextComplet, completed, date, timerTask, time, stopTimer, todo, onEditeItem }) => {
   const [editing, setEditing] = useState(false)
@@ -30,7 +30,7 @@ const Task = ({ label, onDeleted, onTextComplet, completed, date, timerTask, tim
           <span className="description">
             <button className="icon icon-play" onClick={timerTask}></button>
             <button className="icon icon-pause" onClick={stopTimer}></button>
-            {time}
+            <span className="icon-timer">{time}</span>
           </span>
           <span className="created description">
             {`created ${formatDistanceToNow(date, {

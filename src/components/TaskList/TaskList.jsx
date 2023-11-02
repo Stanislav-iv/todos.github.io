@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Task from '../Task/Task'
-import './TaskList.css'
+import Task from '../task/Task'
+import './TaskList.scss'
 
 const TaskList = ({ todos, onDeleted, onTextComplet, onEditeItem, timerTask, stopTimer }) => {
   const elements = todos.map((item) => {

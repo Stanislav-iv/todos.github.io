@@ -1,27 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './TasksFilter.css'
+import './TasksFilter.scss'
 
 const TaskFilter = ({ filter, filterChang }) => {
-  return (
-    <ul className="filters">
-      <li>
-        <button onClick={() => filterChang('all')} className={filter === 'all' ? 'selected' : null}>
-          All
+  const arr = ['all', 'active', 'completed']
+  const newArr = arr.map((el, index) => {
+    return (
+      <li key={index}>
+        <button onClick={() => filterChang(el)} className={filter === el ? 'selected' : null}>
+          {el}
         </button>
       </li>
-      <li>
-        <button onClick={() => filterChang('active')} className={filter === 'active' ? 'selected' : null}>
-          Active
-        </button>
-      </li>
-      <li>
-        <button onClick={() => filterChang('completed')} className={filter === 'completed' ? 'selected' : null}>
-          Completed
-        </button>
-      </li>
-    </ul>
-  )
+    )
+  })
+
+  return <ul className="filters">{newArr}</ul>
 }
 TaskFilter.defaultProps = {
   filter: 'all',

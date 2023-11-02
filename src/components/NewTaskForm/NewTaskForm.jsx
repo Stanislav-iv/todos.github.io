@@ -1,27 +1,27 @@
 import React, { useState } from 'react'
 
-import './NewTaskForm.css'
+import './NewTaskForm.scss'
 
 const NewTaskForm = ({ addItem }) => {
   const [label, setLabel] = useState('')
-  const [min, setMin] = useState('')
-  const [sec, setSec] = useState('')
+  const [time, setTime] = useState({ min: '', sec: '' })
 
   const onLabelChange = (e) => {
     setLabel(e.target.value)
   }
-  const onMinChange = (e) => {
-    setMin(e.target.value)
+
+  const onTimeChange = (e) => {
+    setTime({ ...time, [e.target.name]: e.target.value })
+    if (e.target.value > 59) {
+      setTime({ min: '', sec: '' })
+    }
   }
-  const onSecChange = (e) => {
-    setSec(e.target.value)
-  }
+
   const onSubmit = (e) => {
     e.preventDefault()
-    if (label.trim()) addItem(label, min, sec)
+    if (label.trim()) addItem(label, time.min, time.sec)
     setLabel('')
-    setMin('')
-    setSec('')
+    setTime({ sec: '', min: '' })
   }
 
   return (
@@ -30,8 +30,22 @@ const NewTaskForm = ({ addItem }) => {
       <form className="new-todo-form" onSubmit={onSubmit}>
         <button type="submit" />
         <input className="new-todo" placeholder="What needs to be done?" onChange={onLabelChange} value={label} />
-        <input className="new-todo-form__timer" placeholder="Min" onChange={onMinChange} value={min} />
-        <input className="new-todo-form__timer" placeholder="Sec" onChange={onSecChange} value={sec} />
+        <input
+          className="new-todo-form__timer"
+          type="number"
+          placeholder="Min"
+          name="min"
+          onChange={onTimeChange}
+          value={time.min}
+        />
+        <input
+          className="new-todo-form__timer"
+          type="number"
+          placeholder="Sec"
+          name="sec"
+          onChange={onTimeChange}
+          value={time.sec}
+        />
       </form>
     </header>
   )
