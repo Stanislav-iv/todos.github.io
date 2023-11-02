@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import NewTaskForm from '../newTaskForm/NewTaskForm'
-import Footer from '../footer/Footer'
-import TaskList from '../taskList/TaskList'
+import NewTaskForm from '../newTaskFormm/NewTaskForm'
+import Footer from '../footerr/Footer'
+import TaskList from '../taskListt/TaskList'
 import './App.scss'
 
 const App = () => {
