@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Task from '../taskk/Task'
+import Task from '../task/Task'
 import './TaskList.scss'
 
 const TaskList = ({ todos, onDeleted, onTextComplet, onEditeItem, timerTask, stopTimer }) => {
