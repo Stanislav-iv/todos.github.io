@@ -4,11 +4,18 @@ import PropTypes from 'prop-types'
 import TaskFilter from '../tasksFilter/TasksFilter'
 import './Footer.scss'
 
-const Footer = ({ todoCount, filter, filterChang, clearCompleted }) => {
+const Footer = ({ todoData, filter, setFilter, setTodoData }) => {
+  const clearCompleted = () => {
+    setTodoData([...todoData.filter((element) => !element.completed)])
+  }
+
+  const count = todoData.filter((el) => el.completed).length
+  const todoCount = todoData.length - count
+
   return (
     <footer className="footer">
       <span className="todo-count">{todoCount} items left</span>
-      <TaskFilter filter={filter} filterChang={filterChang} />
+      <TaskFilter filter={filter} setFilter={setFilter} />
       <button onClick={() => clearCompleted()} className="clear-completed">
         Clear completed
       </button>
@@ -22,8 +29,6 @@ Footer.DefaultProps = {
 Footer.propTypes = {
   todoCount: PropTypes.number,
   filter: PropTypes.string,
-  filterChang: PropTypes.func.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
 }
 
 export default Footer

@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './TasksFilter.scss'
 
-const TaskFilter = ({ filter, filterChang }) => {
+const TaskFilter = ({ filter, setFilter }) => {
+  const filterChang = (filter) => {
+    setFilter(filter)
+  }
+
   const arr = ['all', 'active', 'completed']
   const newArr = arr.map((el, index) => {
     return (
@@ -21,7 +25,6 @@ TaskFilter.defaultProps = {
 }
 TaskFilter.propTypes = {
   filter: PropTypes.string,
-  filterChang: PropTypes.func.isRequired,
 }
 
 export default TaskFilter

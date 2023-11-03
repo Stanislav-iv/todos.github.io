@@ -1,10 +1,30 @@
 import React, { useState } from 'react'
-
+import { v4 as uuidv4 } from 'uuid'
 import './NewTaskForm.scss'
 
-const NewTaskForm = ({ addItem }) => {
+const NewTaskForm = ({ setTodoData, todoData }) => {
   const [label, setLabel] = useState('')
   const [time, setTime] = useState({ min: '', sec: '' })
+
+  const creatTodoItem = (value, min, sec) => {
+    return {
+      label: value,
+      completed: false,
+      editing: false,
+      id: uuidv4(),
+      date: new Date(),
+      min: min,
+      sec: sec,
+      time: `${min < 1 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`,
+      timerStop: false,
+      countDown: null,
+    }
+  }
+
+  const addItem = (text, min, sec) => {
+    const newItem = creatTodoItem(text, min, sec)
+    setTodoData([...todoData, newItem])
+  }
 
   const onLabelChange = (e) => {
     setLabel(e.target.value)
